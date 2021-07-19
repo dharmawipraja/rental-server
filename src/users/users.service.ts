@@ -1,7 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 import { UserInput, UserArgs } from './types/user.types';
 import { User, UserDocument } from './models/User.model';
@@ -33,5 +33,4 @@ export class UsersService {
     await this.userModel.deleteOne({ id });
     return id;
   }
-
 }
