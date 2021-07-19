@@ -1,0 +1,26 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Mutation {
+  createUser(userData: UserInput!): User!
+  deleteUser(id: String!): Boolean!
+}
+
+type Query {
+  getUserById(id: String!): User!
+  getUsers(skip: Int = 0, take: Int = 25): [User!]!
+}
+
+"""User model"""
+type User {
+  email: String!
+  password: String!
+  username: String!
+}
+
+input UserInput {
+  email: String!
+  password: String!
+  username: String!
+}
