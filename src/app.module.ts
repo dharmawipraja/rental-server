@@ -12,15 +12,15 @@ const MONGO_URI =
     UsersModule,
     MongooseModule.forRoot(MONGO_URI, {
       useNewUrlParser: true,
-      useUnifiedTopology: true,
+      useUnifiedTopology: true
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       sortSchema: true,
-      context: ({ req }) => ({ req }),
-    }),
+      context: ({ req }) => ({ req })
+    })
   ],
   controllers: [],
-  providers: [],
+  providers: []
 })
 export class AppModule {}
