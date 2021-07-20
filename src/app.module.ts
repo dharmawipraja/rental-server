@@ -12,7 +12,8 @@ const MONGO_URI =
     UsersModule,
     MongooseModule.forRoot(MONGO_URI, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
+      useCreateIndex: true
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',

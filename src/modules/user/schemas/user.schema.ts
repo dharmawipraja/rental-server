@@ -14,7 +14,7 @@ const validateEmail = (email) => {
 @Schema()
 export class User extends Document {
   @Field()
-  _id: ObjectId;
+  _id: string;
 
   @Prop({
     required: true,
