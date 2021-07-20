@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import { Document,  } from 'mongoose';
 import * as bcryptjs from 'bcryptjs';
 
 export type UserDocument = User & Document;
@@ -11,7 +11,7 @@ const validateEmail = (email) => {
 };
 
 @ObjectType({ description: 'User model' })
-@Schema()
+@Schema({ timestamps: true })
 export class User extends Document {
   @Field()
   _id: string;
