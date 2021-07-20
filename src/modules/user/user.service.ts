@@ -4,10 +4,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { UserInput, UserArgs } from './types/user.types';
-import { User, UserDocument } from './models/User.model';
+import { User, UserDocument } from './schemas/user.schema';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async findById(id: string): Promise<User> {
