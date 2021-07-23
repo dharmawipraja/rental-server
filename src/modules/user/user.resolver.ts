@@ -4,13 +4,18 @@ import { UserInput, UserArgs } from './types/user.types';
 import { User } from './schemas/user.schema';
 import { UserService } from './user.service';
 
-@Resolver(() => User)
+@Resolver(User)
 export class UsersResolver {
   constructor(private readonly userService: UserService) {}
 
   @Query(() => User)
   async getUserById(@Args('id') id: string): Promise<User> {
     return await this.userService.findById(id);
+  }
+
+  @Query(() => User)
+  async getUserByEmail(@Args('email') email: string): Promise<User> {
+    return await this.userService.findOneByEmail(email);
   }
 
   @Query(() => [User])

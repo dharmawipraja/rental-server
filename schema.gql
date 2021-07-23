@@ -7,14 +7,21 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type LoginReturnType {
+  accessToken: String!
+  expiresIn: String!
+}
+
 type Mutation {
   createUser(userData: UserInput!): User!
   deleteUser(id: String!): Boolean!
+  login(email: String!, password: String!): LoginReturnType!
 }
 
 type Query {
+  getUserByEmail(email: String!): User!
   getUserById(id: String!): User!
-  getUsers(skip: Int = 0, take: Int = 25): [User!]!
+  getUsers(limit: Int = 25, skip: Int = 0): [User!]!
 }
 
 """User model"""

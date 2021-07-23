@@ -28,5 +28,5 @@ export class UserArgs {
   @Field(() => Int)
   @Min(1)
   @Max(50)
-  take = 25;
+  limit = 25;
 }

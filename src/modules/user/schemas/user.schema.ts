@@ -1,13 +1,22 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document,  } from 'mongoose';
+import { Document } from 'mongoose';
 import * as bcryptjs from 'bcryptjs';
+import { USERTYPE } from 'src/constants/user.constant';
 
 export type UserDocument = User & Document;
 
 const validateEmail = (email) => {
   const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   return re.test(email);
+};
+
+const validateRole = (role) => {
+  const {
+    ROLES: { ADMIN, USER }
+  } = USERTYPE;
+  const result = role === ADMIN || role === USER;
+  return result;
 };
 
 @ObjectType({ description: 'User model' })
@@ -34,12 +43,18 @@ export class User extends Document {
   @Prop({ required: true })
   password: string;
 
+  @Prop({
+    default: USERTYPE.ROLES.USER,
+    validate: [validateRole, 'Role must be user or admin']
+  })
+  roles: string;
+
   @Prop()
   @Field()
   lastLogin: Date;
 
-  @Field()
   @Prop({ default: 0 })
+  @Field()
   loginAttempts: number;
 
   @Prop({ default: false })
