@@ -4,6 +4,7 @@ import * as bcrypt from 'bcryptjs';
 
 import { User } from '../user/schemas/user.schema';
 import { UserService } from '../user/user.service';
+import { JwtPayload } from './types/jwt.types';
 
 @Injectable()
 export class AuthService {
@@ -52,5 +53,13 @@ export class AuthService {
     await this.userService.handleSuccessfulLogin(user);
 
     return this.createToken(user);
+  }
+
+  async validateUser(payload: JwtPayload): Promise<any> {
+    const user = await this.userService.findOneByEmail(payload.email);
+    if (!user) {
+      throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+    }
+    return user;
   }
 }

@@ -19,6 +19,7 @@ type Mutation {
 }
 
 type Query {
+  getProfile: User!
   getUserByEmail(email: String!): User!
   getUserById(id: String!): User!
   getUsers(limit: Int = 25, skip: Int = 0): [User!]!
