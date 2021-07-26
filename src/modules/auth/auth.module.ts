@@ -10,11 +10,10 @@ import { JwtStrategy } from './jwt.strategy';
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: 'thisismyjwtsecretkey',
-      signOptions: {
-        expiresIn: '24h'
-      }
+    JwtModule.registerAsync({
+      useFactory: async () => ({
+        secret: process.env.JWT_SECRET
+      })
     }),
     UsersModule
   ],

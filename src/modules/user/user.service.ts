@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as dayjs from 'dayjs';
+import * as jwt from 'jsonwebtoken';
 
 import { UserInput, UserArgs } from './types/user.types';
 import { User, UserDocument } from './schemas/user.schema';
@@ -35,6 +36,20 @@ export class UserService {
   async createUser(userData: UserInput): Promise<User> {
     const createdUser = await this.userModel.create(userData);
     await createdUser.save();
+
+    jwt.sign(
+      {
+        user: userData.username
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '24h'
+      },
+      (err, emailToken) => {
+        console.log('emailToken', emailToken);
+      }
+    );
+
     return createdUser;
   }
 

@@ -19,7 +19,8 @@ export class AuthService {
 
   async createToken(user: User) {
     const accessToken = this.jwtService.sign({
-      email: user.email
+      email: user.email,
+      sub: user._id
     });
 
     return {
