@@ -61,6 +61,10 @@ export class User extends Document {
   @Field()
   locked: boolean;
 
+  @Prop({ default: false })
+  @Field()
+  confirmed: boolean;
+
   @Prop()
   @Field()
   resetToken: string;

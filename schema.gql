@@ -28,6 +28,7 @@ type Query {
 """User model"""
 type User {
   _id: String!
+  confirmed: Boolean!
   createdAt: DateTime!
   email: String!
   lastLogin: DateTime!

@@ -1,16 +1,21 @@
-import { NotFoundException } from '@nestjs/common';
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import * as dayjs from 'dayjs';
 import * as jwt from 'jsonwebtoken';
 
 import { UserInput, UserArgs } from './types/user.types';
 import { User, UserDocument } from './schemas/user.schema';
+import { handleConfirmationEmail } from 'src/utils/confirmationEmail.utils';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private readonly jwtService: JwtService
+  ) {}
 
   async findById(id: string): Promise<User> {
     const user = await this.userModel.findById({ _id: id });
@@ -34,23 +39,15 @@ export class UserService {
   }
 
   async createUser(userData: UserInput): Promise<User> {
-    const createdUser = await this.userModel.create(userData);
-    await createdUser.save();
+    try {
+      const createdUser = await this.userModel.create(userData);
+      await createdUser.save();
+      handleConfirmationEmail(this.jwtService, createdUser);
 
-    jwt.sign(
-      {
-        user: userData.username
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: '24h'
-      },
-      (err, emailToken) => {
-        console.log('emailToken', emailToken);
-      }
-    );
-
-    return createdUser;
+      return createdUser;
+    } catch (error) {
+      throw new InternalServerErrorException()
+    }
   }
 
   async deleteById(id: string): Promise<string> {

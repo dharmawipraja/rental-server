@@ -12,7 +12,10 @@ import { JwtStrategy } from './jwt.strategy';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       useFactory: async () => ({
-        secret: process.env.JWT_SECRET
+        secret: process.env.JWT_SECRET,
+        signOptions: {
+          expiresIn: '24h'
+        }
       })
     }),
     UsersModule
