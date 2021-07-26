@@ -1,10 +1,9 @@
-import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import * as dayjs from 'dayjs';
-import * as jwt from 'jsonwebtoken';
 
 import { UserInput, UserArgs } from './types/user.types';
 import { User, UserDocument } from './schemas/user.schema';
@@ -39,15 +38,12 @@ export class UserService {
   }
 
   async createUser(userData: UserInput): Promise<User> {
-    try {
-      const createdUser = await this.userModel.create(userData);
-      await createdUser.save();
-      handleConfirmationEmail(this.jwtService, createdUser);
+    const { jwtService } = this;
+    const createdUser = await this.userModel.create(userData);
+    await createdUser.save();
+    handleConfirmationEmail(jwtService, createdUser);
 
-      return createdUser;
-    } catch (error) {
-      throw new InternalServerErrorException()
-    }
+    return createdUser;
   }
 
   async deleteById(id: string): Promise<string> {

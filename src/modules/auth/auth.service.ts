@@ -43,6 +43,13 @@ export class AuthService {
       throw new HttpException('Account locked', HttpStatus.UNAUTHORIZED);
     }
 
+    if (!user.confirmed) {
+      throw new HttpException(
+        'Please confirm your email',
+        HttpStatus.UNAUTHORIZED
+      );
+    }
+
     if (!this.validatePassword(user, password)) {
       await this.userService.handleInvalidPassword(user);
       throw new HttpException(

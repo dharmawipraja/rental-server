@@ -16,7 +16,7 @@ import { UserService } from './user.service';
           expiresIn: '24h'
         }
       })
-    }),
+    })
   ],
   providers: [UsersResolver, UserService],
   exports: [UserService]
