@@ -1,19 +1,21 @@
-import { NotFoundException } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, NotFoundException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 import { UserInput, UserArgs } from './types/user.types';
 import { User, UserDocument } from './schemas/user.schema';
 import { handleConfirmationEmail } from 'src/utils/confirmationEmail.utils';
+import { RedisService } from '../redis/redis.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly redis: RedisService
   ) {}
 
   async findById(id: string): Promise<User> {
@@ -38,10 +40,12 @@ export class UserService {
   }
 
   async createUser(userData: UserInput): Promise<User> {
-    const { jwtService } = this;
+    const emailToken = this.jwtService.sign({ email: userData.email });
     const createdUser = await this.userModel.create(userData);
     await createdUser.save();
-    handleConfirmationEmail(jwtService, createdUser);
+
+    await this.redis.set(userData.username, emailToken, { ttl: 1000 * 3600 * 24 });
+    handleConfirmationEmail(emailToken, createdUser);
 
     return createdUser;
   }

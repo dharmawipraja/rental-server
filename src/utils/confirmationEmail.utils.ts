@@ -4,7 +4,7 @@ import * as nodemailer from 'nodemailer';
 import { User } from 'src/modules/user/schemas/user.schema';
 
 export const handleConfirmationEmail = async (
-  jwtService: JwtService,
+  emailToken: string,
   user: User
 ) => {
   // For now we use mock SMTP server using Ethereal
@@ -17,7 +17,6 @@ export const handleConfirmationEmail = async (
       pass: 'ygswuhMpuppkKamKWd'
     }
   });
-  const emailToken = jwtService.sign({ email: user.email });
   const url = `http://localhost:3000/confirmation/${emailToken}`;
 
   transporter.sendMail({

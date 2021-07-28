@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
+import { RedisModule } from '../redis/redis.module';
 
 import { UserSchema } from './schemas/user.schema';
 import { UsersResolver } from './user.resolver';
@@ -8,6 +9,7 @@ import { UserService } from './user.service';
 
 @Module({
   imports: [
+    RedisModule,
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     JwtModule.registerAsync({
       useFactory: async () => ({
