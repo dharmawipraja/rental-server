@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, Inject, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
@@ -44,7 +44,9 @@ export class UserService {
     const createdUser = await this.userModel.create(userData);
     await createdUser.save();
 
-    await this.redis.set(userData.username, emailToken, { ttl: 1000 * 3600 * 24 });
+    await this.redis.set(userData.username, emailToken, {
+      ttl: 1000 * 3600 * 24
+    });
     handleConfirmationEmail(emailToken, createdUser);
 
     return createdUser;

@@ -9,8 +9,8 @@ import { RedisService } from './redis.service';
         store: redisStore,
         host: process.env.REDIS_HOST,
         port: process.env.REDIS_PORT
-      }),
-    }),
+      })
+    })
   ],
   providers: [RedisService],
   exports: [CacheModule, RedisService]

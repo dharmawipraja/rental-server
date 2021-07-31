@@ -1,4 +1,3 @@
-import { JwtService } from '@nestjs/jwt';
 import * as nodemailer from 'nodemailer';
 
 import { User } from 'src/modules/user/schemas/user.schema';
