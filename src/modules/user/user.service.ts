@@ -40,11 +40,12 @@ export class UserService {
   }
 
   async createUser(userData: UserInput): Promise<User> {
+    const { email } = userData;
     const emailToken = this.jwtService.sign({ email: userData.email });
     const createdUser = await this.userModel.create(userData);
     await createdUser.save();
 
-    await this.redis.set(userData.username, emailToken, {
+    await this.redis.set(emailToken, email, {
       ttl: 1000 * 3600 * 24
     });
     handleConfirmationEmail(emailToken, createdUser);
@@ -72,5 +73,19 @@ export class UserService {
     }
 
     await user.save();
+  }
+
+  async confirmUser(emailToken: string): Promise<boolean> {
+    const email = await this.redis.get(emailToken);
+    const user = this.userModel.findOne({ email });
+
+    if (!user) {
+      throw new NotFoundException(email);
+    }
+
+    await this.userModel.updateOne({ email }, { confirmed: true });
+    await this.redis.del(emailToken);
+
+    return true;
   }
 }

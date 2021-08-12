@@ -4,6 +4,7 @@ import { Document } from 'mongoose';
 import * as bcryptjs from 'bcryptjs';
 import { USERTYPE } from 'src/constants/user.constant';
 
+// export type UserDocument = User & Document;
 export type UserDocument = User & Document;
 
 const validateEmail = (email) => {

@@ -13,6 +13,7 @@ type LoginReturnType {
 }
 
 type Mutation {
+  confirmUser(emailToken: String!): Boolean!
   createUser(userData: UserInput!): User!
   deleteUser(id: String!): Boolean!
   login(email: String!, password: String!): LoginReturnType!

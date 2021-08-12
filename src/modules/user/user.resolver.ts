@@ -47,4 +47,9 @@ export class UsersResolver {
   async deleteUser(@Args('id') id: string) {
     return await this.userService.deleteById(id);
   }
+
+  @Mutation(() => Boolean)
+  async confirmUser(@Args('emailToken') emailToken: string) {
+    return await this.userService.confirmUser(emailToken);
+  }
 }

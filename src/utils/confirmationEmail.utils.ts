@@ -16,7 +16,9 @@ export const handleConfirmationEmail = async (
       pass: 'ygswuhMpuppkKamKWd'
     }
   });
-  const url = `http://localhost:3000/confirmation/${emailToken}`;
+  // clientHost shoul be directed to your FE web address, and the FE will handle the mutation for confirm user
+  const clientHost = 'http://localhost:3003/user/confirmation';
+  const url = `${clientHost}/${emailToken}`;
 
   transporter.sendMail({
     from: 'No Reply <info-rental@example.com>',
